@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
-from src.database import Base
+from src.db.database import Base
 import enum
 
 class DriverClassEnum(enum.Enum):
