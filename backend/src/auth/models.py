@@ -1,3 +1,6 @@
+import uuid
+
+from pydantic import UUID4
 from sqlalchemy import Column, Integer, String, TIMESTAMP, func
 from sqlalchemy.orm import relationship
 
@@ -14,3 +17,9 @@ class User(Base):
     user_date_auth = Column(TIMESTAMP, server_default=func.now())
 
     orders = relationship("Order", back_populates="user")
+
+class CRL(Base):
+    __tablename__ = "crl"
+
+    id = Column(UUID4(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
+    token = Column(String, index=True, nullable=False)
