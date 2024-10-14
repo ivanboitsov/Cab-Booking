@@ -17,5 +17,3 @@ class Driver(Base):
     tel = Column(String, nullable=False)
     car = Column(String, nullable=False)
     driver_class = Column(Enum(DriverClassEnum), nullable=False)
-
-    orders = relationship("Order", back_populates="driver")
