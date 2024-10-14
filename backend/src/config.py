@@ -1,7 +1,15 @@
-from dotenv import load_dotenv
 import os
 
+from dotenv import load_dotenv
+from fastapi.security import OAuth2PasswordBearer
+
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+logger.info("Loading .env file")
 load_dotenv()
+logger.info(".env file loaded")
 
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT")
@@ -16,3 +24,9 @@ REFRESH_TOKEN_EXPIRE_MINUTES = os.environ.get("REFRESH_TOKEN_EXPIRE_MINUTES")
 ALGORITHM = os.environ.get("ALGORITHM")
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 JWT_REFRESH_SECRET_KEY = os.environ.get("JWT_REFRESH_SECRET_KEY")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/bookingCar/login")
+
+SWAGGER_GROUPS ={
+    "user": "User"
+}

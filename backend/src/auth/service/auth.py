@@ -14,17 +14,19 @@ password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class AuthService:
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
-        self.loger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(__name__)
 
         self.TOKEN_LIFETIME = int(ACCESS_TOKEN_EXPIRE_MINUTES)
         self.SECRET_KEY = str(JWT_SECRET_KEY)
         self.ALGORITHM = str(ALGORITHM)
 
-    async def get_hashed_password(self, password: str) -> str:
+    @staticmethod
+    def get_hashed_password(password: str) -> str:
         return password_context.hash(password)
 
-    async def verify_password(self, password: str, hashed_password: str) -> bool:
-        return password_context.verify(password, hashed_password)
+    @staticmethod
+    def verify_hashed_password(plain_password: str, hashed_password: str) -> bool:
+        return password_context.verify(plain_password, hashed_password)
 
     async def create_access_token(self, data: dict) -> str:
         try:
@@ -48,7 +50,7 @@ class AuthService:
             self.logger.info(f"(Get data from token) Successful get data: {payload}")
             return payload
         except jwt.PyJWTError as e:
-            self.loger.warning(f"(Get data from token) Bad auth token: {token}")
+            self.logger.warning(f"(Get data from token) Bad auth token: {token}")
             raise
         except Exception as e:
             self.logger.error(f"(Get data from token) Error auth token: {e}")
@@ -61,15 +63,15 @@ class AuthService:
             db.commit()
             self.logger.info(f"(Revoke access token) Token revoked: {token}")
         except Exception as e:
-            self.loger.error(f"(Revoke access token) Error token revoked: {e}")
+            self.logger.error(f"(Revoke access token) Error token revoked: {e}")
 
     async def check_revoked(self, db: Session, token: str) -> bool:
         try:
             if db.query(CRL).filter(CRL.token == token).first():
-                self.loger.warning(f"(Check revoked access token) Token revoked: {token}")
+                self.logger.warning(f"(Check revoked access token) Token revoked: {token}")
                 return True
             else:
-                self.loger.warning(f"(Check revoked access token) Token not revoked: {token}")
+                self.logger.warning(f"(Check revoked access token) Token not revoked: {token}")
                 return False
         except Exception as e:
-            self.loger.error(f"(Check revoked access token) Error revoking token: {e}")
+            self.logger.error(f"(Check revoked access token) Error revoking token: {e}")
