@@ -80,9 +80,9 @@ class UserService:
             self.logger.info(f"(Creating user) Error: {e}")
             raise
 
-    async def update_user(self, db: Session, user_id: int, name: str = None, tel: str = None, email: str = None) -> User:
+    async def update_user(self, db: Session, _id: int, name: str, tel: str, email: str) -> User:
         try:
-            user = get_user_id(user_id)
+            user = await self.get_user_by_id(db,_id)
 
             if name:
                 user.name = name
@@ -98,8 +98,8 @@ class UserService:
 
             return user
         except NoResultFound:
-            self.logger.info(f"(Updating user) Error: User with ID {user_id} not found")
-            raise ValueError(f"User with ID {user_id} not found")
+            self.logger.info(f"(Updating user) Error: User with ID {_id} not found")
+            raise ValueError(f"User with ID {_id} not found")
         except Exception as e:
             db.rollback()
             self.logger.info(f"(Updating user) Error: {e}")

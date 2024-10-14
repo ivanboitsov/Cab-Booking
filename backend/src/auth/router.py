@@ -134,7 +134,7 @@ async def get_profile(access_token: str = Depends(oauth2_scheme),
             logger.warning(f"(Get user profile) Token is revoked: {access_token}")
             raise HTTPException(status_code=403, detail="Token revoked")
 
-        token_data = auth_service.get_data_from_access_token(access_token)
+        token_data = await auth_service.get_data_from_access_token(access_token)
 
         user = await user_service.get_user_by_id(db, token_data["sub"])
 
@@ -185,14 +185,14 @@ async def edit_profile(user_profile: UserProfileSchema,
             logger.warning(f"(Update user profile) Token is revoked: {access_token}")
             raise HTTPException(status_code=403, detail="Token revoked")
 
-        token_data = auth_service.get_data_from_access_token(access_token)
+        token_data = await auth_service.get_data_from_access_token(access_token)
 
         user_id = token_data["sub"]
         user = await user_service.get_user_by_id(db, user_id)
 
         updated_user = await user_service.update_user(
             db,
-            user_id=user_id,
+            _id=user.id,
             name=user_profile.name,
             tel=user_profile.tel,
             email=user_profile.email
@@ -201,7 +201,7 @@ async def edit_profile(user_profile: UserProfileSchema,
         logger.info(f"(Update user profile) Successfully updated profile with id: {updated_user.id}")
 
         return UserProfileSchema(
-            id=updated_user.id,
+            id=user.id,
             name=updated_user.name,
             tel=updated_user.tel,
             email=updated_user.email
