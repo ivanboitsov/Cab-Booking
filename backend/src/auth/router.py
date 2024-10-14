@@ -55,7 +55,9 @@ async def register(user_reg_sch: UserRegistrationSchema,
         user = await user_service.create_user(db, user_reg_sch.name, user_reg_sch.tel, user_reg_sch.email, user_reg_sch.password)
 
         logger.info(f"(Registration) User successful register {user.id}")
-        return MessageSchema(messageDigest=str(user.id))
+        return MessageSchema(messageDigest=str(user.id),
+                             description="User registered successfully"
+                             )
     except HTTPException:
         raise
     except ValueError as validation_error:
