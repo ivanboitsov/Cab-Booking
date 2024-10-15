@@ -57,7 +57,7 @@ async def get_house_by_id(house_id: int,
             logger.warning(f"(Get house find by id) House not found: {house.id}")
             raise HTTPException(status_code=404, detail="House not found")
 
-        logger.warning(f"(Get house find by id) House successful found: {house.id}")
+        logger.info(f"(Get house find by id) House successful found: {house.id}")
 
         return HouseSchema(
             id = house.id,
