@@ -10,6 +10,8 @@ from src.general.auth.schema.login import UserLoginSchema
 from src.general.auth.schema.profile import UserProfileSchema
 from src.general.auth.schema.registration import UserRegistrationSchema
 from src.general.auth.schema.access_token import AccessTokenSchema
+from src.general.order.schema.user_order_detail import UserOrderDetailSchema
+from src.general.order.service import OrderService
 
 from src.helper.message.schema import MessageSchema
 from src.helper.error.schema import ErrorSchema
@@ -67,6 +69,7 @@ async def register(user_reg_sch: UserRegistrationSchema,
         logger.error(f"(Registration) Error {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 @user_router.post(
     "/login/",
     tags=[SWAGGER_GROUPS["user"]],
@@ -106,6 +109,78 @@ async def login(user_log_sch: UserLoginSchema,
     except Exception as e:
         logger.error(f"(Registration) Error {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@user_router.get(
+    "/{user_id}/orders",
+    tags=[SWAGGER_GROUPS["user"]],
+    response_model=list[UserOrderDetailSchema],
+    responses={
+        200: {
+            "model": list[UserOrderDetailSchema]
+        },
+        401: {
+            "model": ErrorSchema
+        },
+        403: {
+            "model": ErrorSchema
+        },
+        500: {
+            "model": ErrorSchema
+        },
+    }
+)
+async def get_user_orders(user_id: int,
+                          db: Session = Depends(get_db),
+                          access_token: str = Depends(oauth2_scheme),
+                          auth_service: AuthService = Depends(AuthService),
+                          order_service: OrderService = Depends(OrderService)
+                          ):
+    try:
+        if await auth_service.check_revoked(db, access_token):
+            logger.warning(f"(Get user orders) Token is revoked: {access_token}")
+            raise HTTPException(status_code=403, detail="Token revoked")
+
+        orders = await order_service.get_user_orders(db, user_id)
+
+        if not orders:
+            logger.info(f"(Get user orders) User's {user_id} orders not found:")
+            raise HTTPException(status_code=404, detail="No orders found for this user")
+
+        logger.info(f"(Get user orders) User's orders successful found")
+
+        orders_schema = []
+
+        for order in orders:
+            orders_schema.append(
+                UserOrderDetailSchema(
+                    id=order.id,
+                    driver_id=order.driver_id,
+                    driver_class=order.driver_class,
+                    car=order.car,
+                    house_from_id=order.house_from_id,
+                    house_from_street=order.house_from_street,
+                    house_from_building=order.house_from_building,
+                    house_from_number=order.house_from_number,
+                    house_to_id=order.house_to_id,
+                    house_to_street=order.house_to_street,
+                    house_to_building=order.house_to_building,
+                    house_to_number=order.house_to_number,
+                    order_time=order.order_date
+                )
+            )
+
+        return orders_schema
+
+    except jwt.PyJWTError as e:
+        logger.warning(f"(Get user orders) Bad token: {e}")
+        raise HTTPException(status_code=403, detail="Bad token")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"(Get user orders) Error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 
 @user_router.get(
     "/",

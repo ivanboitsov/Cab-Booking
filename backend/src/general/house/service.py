@@ -73,3 +73,25 @@ class HouseService:
         except Exception as e:
             self.logger.error(f"(Get houses by street) Error: {e}")
             raise
+
+    async def get_house_id(self, db: Session, street: str, building: Optional[str], number: str) -> Optional[int]:
+        try:
+            query = db.query(House).filter(House.street == street, House.number == number)
+
+            if building:
+                query = query.filter(House.building == building)
+
+            house = query.first()
+
+            if house:
+                self.logger.info(
+                    f"(Get house ID) Found house with ID {house.id} for street '{street}', building '{building}', and number '{number}'")
+                return house.id
+            else:
+                self.logger.info(
+                    f"(Get house ID) No house found for street '{street}', building '{building}', and number '{number}'")
+                return None
+
+        except Exception as e:
+            self.logger.error(f"(Get house ID) Error: {e}")
+            raise
