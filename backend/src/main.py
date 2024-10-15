@@ -5,14 +5,17 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.auth.router import user_router
 from src.house.router import house_router
+from src.driver.router import driver_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/taksa")
 
-router.include_router(user_router)
 router.include_router(house_router)
+router.include_router(driver_router)
+router.include_router(user_router)
+
 
 app = FastAPI()
 
