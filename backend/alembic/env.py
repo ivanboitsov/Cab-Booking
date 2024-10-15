@@ -7,10 +7,10 @@ from alembic import context
 
 from src.config import DB_HOST, DB_PASS, DB_NAME, DB_PORT, DB_USER
 
-from src.auth.models import User
-from src.house.models import House
-from src.order.models import Order
-from src.driver.models import Driver
+from src.general.auth.models import User
+from src.general.house.models import House
+from src.general.order.models import Order
+from src.general.driver.models import Driver
 
 config = context.config
 
