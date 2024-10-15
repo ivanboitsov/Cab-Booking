@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-from src.driver.enum.DriverClassEnum import DriverClassEnum
+from src.general.driver.enum.DriverClassEnum import DriverClassEnum
 
 
 class DriverSchema(BaseModel):

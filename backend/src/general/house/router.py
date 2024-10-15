@@ -2,16 +2,16 @@ import logging
 import jwt
 
 from sqlalchemy.orm import Session
-from src.db.database import get_db
+from src.database import get_db
 
 from src.config import oauth2_scheme, SWAGGER_GROUPS
 from fastapi import APIRouter, Depends, HTTPException
 
-from src.house.service import HouseService
-from src.auth.service.auth import AuthService
-from src.house.schema.house import HouseSchema
+from src.general.house.service import HouseService
+from src.general.auth.service.auth import AuthService
+from src.general.house.schema.house import HouseSchema
 
-from src.error.schema import ErrorSchema
+from src.helper.error.schema import ErrorSchema
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

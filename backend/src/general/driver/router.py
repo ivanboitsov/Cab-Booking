@@ -2,19 +2,19 @@ import logging
 import jwt
 
 from sqlalchemy.orm import Session
-from src.db.database import get_db
+from src.database import get_db
 
 from src.config import oauth2_scheme, SWAGGER_GROUPS
 from fastapi import APIRouter, Depends, HTTPException
 
-from src.auth.service.auth import AuthService
-from src.driver.enum.DriverClassEnum import DriverClassEnum
-from src.driver.service import DriverService
-from src.driver.schema.driver import DriverSchema
-from src.driver.schema.driver_create import DriverCreateSchema
+from src.general.auth.service.auth import AuthService
+from src.general.driver.enum.DriverClassEnum import DriverClassEnum
+from src.general.driver.service import DriverService
+from src.general.driver.schema.driver import DriverSchema
+from src.general.driver.schema.driver_create import DriverCreateSchema
 
-from src.error.schema import ErrorSchema
-from src.message.schema import MessageSchema
+from src.helper.error.schema import ErrorSchema
+from src.helper.message.schema import MessageSchema
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

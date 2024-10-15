@@ -3,8 +3,8 @@ import logging
 from typing import List, Optional
 
 from sqlalchemy.orm import Session
-from src.driver.models import Driver
-from src.driver.enum.DriverClassEnum import DriverClassEnum
+from src.general.driver.models import Driver
+from src.general.driver.enum.DriverClassEnum import DriverClassEnum
 
 
 class DriverService:

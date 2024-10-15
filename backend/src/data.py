@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from src.db.database import SessionLocal
-from src.driver.models import Driver, DriverClassEnum
-from src.house.models import House
+from src.database import SessionLocal
+from src.general.driver.models import Driver, DriverClassEnum
+from src.general.house.models import House
 
 def seed_drivers():
     db: Session = SessionLocal()

@@ -2,7 +2,7 @@ import logging
 
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from src.house.models import House
+from src.general.house.models import House
 
 
 class HouseService:

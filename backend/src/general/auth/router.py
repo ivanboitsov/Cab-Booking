@@ -4,18 +4,18 @@ import jwt
 from fastapi import  APIRouter, HTTPException, Depends
 
 from sqlalchemy.orm import Session
-from src.db.database import get_db
+from src.database import get_db
 
-from src.auth.schema.login import UserLoginSchema
-from src.auth.schema.profile import UserProfileSchema
-from src.auth.schema.registration import UserRegistrationSchema
-from src.auth.schema.access_token import AccessTokenSchema
+from src.general.auth.schema.login import UserLoginSchema
+from src.general.auth.schema.profile import UserProfileSchema
+from src.general.auth.schema.registration import UserRegistrationSchema
+from src.general.auth.schema.access_token import AccessTokenSchema
 
-from src.message.schema import MessageSchema
-from src.error.schema import ErrorSchema
+from src.helper.message.schema import MessageSchema
+from src.helper.error.schema import ErrorSchema
 
-from src.auth.service.auth import AuthService
-from src.auth.service.user import UserService
+from src.general.auth.service.auth import AuthService
+from src.general.auth.service.user import UserService
 
 from src.config import oauth2_scheme, SWAGGER_GROUPS
 

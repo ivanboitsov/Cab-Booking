@@ -4,8 +4,8 @@ from typing import List
 from git.util import get_user_id
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
-from src.auth.models import User
-from src.auth.service.auth import AuthService
+from src.general.auth.models import User
+from src.general.auth.service.auth import AuthService
 
 class UserService:
     def __init__(self):

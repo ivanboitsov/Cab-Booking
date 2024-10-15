@@ -7,7 +7,7 @@ from debugpy.adapter.sessions import Session
 from passlib.context import CryptContext
 
 from src.config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, JWT_SECRET_KEY
-from src.auth.models import CRL
+from src.general.auth.models import CRL
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
